@@ -1,0 +1,86 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <img src="{{ url_for('static', filename='logo-gasa.jpeg') }}" 
+             alt="Gasa Formation" 
+             style="height: 100px; margin-bottom: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);"
+             onerror="this.style.display='none'">
+        <h1 class="display-5">Liste des mémoires soutenus</h1>
+        <p class="lead text-muted">Gasa Formation - Excellence académique</p>
+        <hr>
+    </div>
+</div>
+
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="search" class="form-control" placeholder="Rechercher par titre, auteur..." value="{{ search }}">
+    </div>
+    <div class="col-md-2">
+        <select name="annee" class="form-select">
+            <option value="">Toutes les années</option>
+            {% for annee in annees %}
+                <option value="{{ annee }}" {% if filtre_annee|string == annee|string %}selected{% endif %}>{{ annee }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="mention" class="form-select">
+            <option value="">Toutes les mentions</option>
+            {% for mention in mentions %}
+                <option value="{{ mention }}" {% if filtre_mention == mention %}selected{% endif %}>{{ mention }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+    </div>
+    <div class="col-md-2">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary w-100">Réinitialiser</a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Année</th>
+                <th>Filière</th>
+                <th>Mention</th>
+                <th>Note</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for memoire in memoires %}
+            <tr>
+                <td>{{ memoire.titre }}</td>
+                <td>{{ memoire.auteur }}</td>
+                <td>{{ memoire.annee }}</td>
+                <td>{{ memoire.filiere }}</td>
+                <td>{{ memoire.mention }}</td>
+                <td>{{ memoire.note_sur_20 if memoire.note_sur_20 else '-' }}</td>
+                <td>
+                    <a href="{{ url_for('fiche', id=memoire.id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    <a href="{{ url_for('modifier', id=memoire.id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                    <a href="{{ url_for('supprimer', id=memoire.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Confirmer la suppression ?')"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center">Aucun mémoire trouvé</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% if memoires|length > 0 %}
+<div class="alert alert-info mt-3">
+    <strong>{{ memoires|length }}</strong> mémoire(s) trouvé(s)
+</div>
+{% endif %}
+{% endblock %}
