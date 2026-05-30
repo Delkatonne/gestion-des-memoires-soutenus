@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4">📊 Tableau de bord statistique</h1>
+
+<!-- Cartes de statistiques -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total mémoires</h5>
+                <h2 class="card-text">{{ stats.total_memoires }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Moyenne générale</h5>
+                <h2 class="card-text">{{ "%.2f"|format(stats.moyenne_generale) }}/20</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Note max</h5>
+                <h2 class="card-text">{{ stats.note_max }}/20</h2>
+                <small>{{ stats.meilleure_mention }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Note min</h5>
+                <h2 class="card-text">{{ stats.note_min }}/20</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Graphiques -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Distribution des notes par année</h5>
+            </div>
+            <div class="card-body text-center">
+                <img src="data:image/png;base64,{{ graph1 }}" class="img-fluid" alt="Graphique notes par année">
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">Répartition des mentions</h5>
+            </div>
+            <div class="card-body text-center">
+                <img src="data:image/png;base64,{{ graph2 }}" class="img-fluid" alt="Répartition mentions">
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Évolution de la moyenne par année</h5>
+            </div>
+            <div class="card-body text-center">
+                <img src="data:image/png;base64,{{ graph3 }}" class="img-fluid" alt="Évolution moyenne">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> Statistiques basées sur {{ stats.total_notes }} mémoires notés sur {{ stats.total_memoires }} au total.
+</div>
+{% endblock %}
