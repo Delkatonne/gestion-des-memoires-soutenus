@@ -12,34 +12,34 @@
         <hr>
     </div>
 </div>
-
-<form method="GET" class="row g-3 mb-4">
-    <div class="col-md-4">
-        <input type="text" name="search" class="form-control" placeholder="Rechercher par titre, auteur..." value="{{ search }}">
-    </div>
-    <div class="col-md-2">
-        <select name="annee" class="form-select">
-            <option value="">Toutes les années</option>
-            {% for annee in annees %}
-                <option value="{{ annee }}" {% if filtre_annee|string == annee|string %}selected{% endif %}>{{ annee }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="col-md-2">
-        <select name="mention" class="form-select">
-            <option value="">Toutes les mentions</option>
-            {% for mention in mentions %}
-                <option value="{{ mention }}" {% if filtre_mention == mention %}selected{% endif %}>{{ mention }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="col-md-2">
-        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-    </div>
-    <div class="col-md-2">
-        <a href="{{ url_for('index') }}" class="btn btn-secondary w-100">Réinitialiser</a>
-    </div>
-</form>
+<!-- Formulaire de recherche et de filtrage -->
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Rechercher par titre, auteur..." value="{{ search }}">
+        </div>
+        <div class="col-md-2">
+            <select name="annee" class="form-select">
+                <option value="">Toutes les années</option>
+                {% for annee in annees %}
+                    <option value="{{ annee }}" {% if filtre_annee|string == annee|string %}selected{% endif %}>{{ annee }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select name="mention" class="form-select">
+                <option value="">Toutes les mentions</option>
+                {% for mention in mentions %}
+                    <option value="{{ mention }}" {% if filtre_mention == mention %}selected{% endif %}>{{ mention }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary w-100">Réinitialiser</a>
+        </div>
+    </form>
 
 <div class="table-responsive">
     <table class="table table-striped table-hover">
