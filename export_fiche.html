@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche mémoire - {{ memoire.titre }} - UATM Gasa Formation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; padding: 40px; }
+        .document { max-width: 900px; margin: 0 auto; background: white; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border-radius: 10px; overflow: hidden; }
+        .header { background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); color: white; padding: 40px; text-align: center; }
+        .header h1 { font-size: 28px; margin-bottom: 10px; }
+        .header h2 { font-size: 18px; font-weight: normal; opacity: 0.9; }
+        .content { padding: 40px; }
+        .info-section { margin-bottom: 30px; }
+        .info-title { font-size: 18px; font-weight: bold; color: #0d6efd; border-bottom: 2px solid #0d6efd; padding-bottom: 10px; margin-bottom: 20px; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .info-item { padding: 10px; background: #f8f9fa; border-radius: 8px; }
+        .info-label { font-weight: bold; color: #0d6efd; display: block; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
+        .info-value { font-size: 16px; color: #333; }
+        .resume-section { margin-top: 30px; padding: 20px; background: #f8f9fa; border-left: 4px solid #0d6efd; border-radius: 8px; }
+        .resume-section h3 { color: #0d6efd; margin-bottom: 15px; font-size: 16px; }
+        .resume-text { line-height: 1.6; color: #555; text-align: justify; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; border-top: 1px solid #dee2e6; }
+        .no-print { text-align: center; padding: 20px; background: white; margin-top: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .btn { padding: 12px 24px; font-size: 14px; border: none; border-radius: 8px; cursor: pointer; margin: 0 5px; font-weight: bold; transition: all 0.3s ease; }
+        .btn-primary { background: #0d6efd; color: white; }
+        .btn-primary:hover { background: #0a58ca; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #5a6268; }
+        .mention { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; }
+        .mention-passable { background: #ffc107; color: #856404; }
+        .mention-assez-bien { background: #17a2b8; color: white; }
+        .mention-bien { background: #28a745; color: white; }
+        .mention-tres-bien { background: #007bff; color: white; }
+        .mention-tres-honorable { background: #6f42c1; color: white; }
+        @media print {
+            body { background: white; padding: 0; }
+            .no-print { display: none; }
+            .document { box-shadow: none; border-radius: 0; }
+            .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .info-item { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <div class="header">
+            <h1>🏫 Gasa Formation</h1>
+            <h2>Système de Gestion des Mémoires Soutenus</h2>
+        </div>
+        <div class="content">
+            <div class="info-section">
+                <div class="info-title">📄 Informations du mémoire</div>
+                <div class="info-grid">
+                    <div class="info-item"><span class="info-label">Titre</span><span class="info-value">{{ memoire.titre }}</span></div>
+                    <div class="info-item"><span class="info-label">Auteur</span><span class="info-value">{{ memoire.auteur }}</span></div>
+                    <div class="info-item"><span class="info-label">Année de soutenance</span><span class="info-value">{{ memoire.annee }}</span></div>
+                    <div class="info-item"><span class="info-label">Filière</span><span class="info-value">{{ memoire.filiere }}</span></div>
+                    <div class="info-item"><span class="info-label">Directeur de mémoire</span><span class="info-value">{{ memoire.directeur }}</span></div>
+                    <div class="info-item"><span class="info-label">Date de soutenance</span><span class="info-value">{{ memoire.date_soutenance if memoire.date_soutenance else 'Non renseignée' }}</span></div>
+                    <div class="info-item">
+                        <span class="info-label">Mention obtenue</span>
+                        <span class="info-value">
+                            {% set mention_class = {'Passable': 'mention-passable', 'Assez bien': 'mention-assez-bien', 'Bien': 'mention-bien', 'Très bien': 'mention-tres-bien', 'Très honorable': 'mention-tres-honorable'} %}
+                            <span class="mention {{ mention_class.get(memoire.mention, '') }}">{{ memoire.mention }}</span>
+                        </span>
+                    </div>
+                    <div class="info-item"><span class="info-label">Note obtenue</span><span class="info-value">{{ memoire.note_sur_20 if memoire.note_sur_20 else 'Non renseignée' }}/20</span></div>
+                </div>
+            </div>
+            {% if memoire.resume %}
+            <div class="resume-section">
+                <h3>📖 Résumé du mémoire</h3>
+                <div class="resume-text">{{ memoire.resume }}</div>
+            </div>
+            {% endif %}
+            {% if memoire.documents %}
+            <div class="info-section">
+                <div class="info-title">📎 Documents annexes</div>
+                <div class="info-grid">
+                    {% for doc in memoire.documents %}
+                    <div class="info-item"><span class="info-label">Document {{ loop.index }}</span><span class="info-value">{{ doc.nom_fichier }}</span></div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <p>Document généré le {{ datetime.now().strftime('%d/%m/%Y à %H:%M:%S') }}</p>
+            <p>© 2025 Gasa Formation - Tous droits réservés</p>
+        </div>
+    </div>
+    <div class="no-print">
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimer / Sauvegarder en PDF</button>
+        <button class="btn btn-secondary" onclick="window.close()">❌ Fermer</button>
+    </div>
+</body>
+</html>
