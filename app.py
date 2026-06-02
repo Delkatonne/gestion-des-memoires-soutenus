@@ -173,7 +173,7 @@ Détails :
 - Mention   : {memoire.mention}
 - Note      : {memoire.note_sur_20 if memoire.note_sur_20 else "Non renseignée"}/20
 
-Consultez-le sur : http://127.0.0.1:5000/fiche/{memoire.id}
+Consultez-le sur : /fiche/{memoire.id}
 
 Cordialement,
 Système de Gestion des Mémoires - Gasa Formation
@@ -367,7 +367,8 @@ def export_csv():
         writer.writerow([
             m.id, m.titre, m.auteur, m.annee, m.filiere,
             m.directeur, m.mention, m.note_sur_20,
-            m.date_soutenance, m.resume
+            m.date_soutenance.strftime('%d/%m/%Y') if m.date_soutenance else '',
+            m.resume
         ])
 
     output.seek(0)
@@ -543,12 +544,14 @@ def statistiques():
                            graph1=graph1, graph2=graph2, graph3=graph3,
                            stats=stats)
 
-# ==================== LANCEMENT ====================
+# ==================== INITIALISATION DE LA BASE (POUR RENDER) ====================
+# Ce bloc s'exécute au démarrage de l'application sur Render
 
-def init_db():
-    """Initialise la base de données et crée les comptes par défaut"""
+with app.app_context():
+    # Créer toutes les tables si elles n'existent pas
     db.create_all()
-    # Créer les comptes par défaut si la table est vide
+    
+    # Créer les comptes par défaut si la table user est vide
     if User.query.count() == 0:
         admin = User(username='admin', is_admin=True)
         admin.set_password('admin123')
@@ -556,15 +559,17 @@ def init_db():
         gasa.set_password('gasa2025')
         db.session.add_all([admin, gasa])
         db.session.commit()
-        print("  Comptes créés : admin/admin123  |  gasa/gasa2025")
+        print("✅ Comptes créés : admin/admin123 | gasa/gasa2025")
+        print("✅ Base de données initialisée avec succès !")
+
+# ==================== LANCEMENT ====================
 
 if __name__ == '__main__':
-    with app.app_context():
-        init_db()
+    port = int(os.environ.get('PORT', 5000))
     print("\n" + "="*50)
     print("  Gestion des Mémoires - Gasa Formation")
     print("="*50)
-    print("  Accès   : http://127.0.0.1:5000")
+    print(f"  Accès   : http://0.0.0.0:{port}")
     print("  Comptes : admin/admin123  |  gasa/gasa2025")
     print("="*50 + "\n")
-    app.run(debug=False, port=5000)
+    app.run(debug=False, host='0.0.0.0', port=port)
