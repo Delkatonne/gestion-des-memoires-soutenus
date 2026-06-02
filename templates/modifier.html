@@ -1,65 +1,88 @@
 ﻿{% extends "base.html" %}
 
 {% block content %}
-<h1 class="mb-4">Modifier le mémoire</h1>
+<h1 class="mb-4"><i class="fas fa-edit text-warning"></i> Modifier le mémoire</h1>
 
-<form method="POST" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            {{ form.titre.label(class="form-label") }}
-            {{ form.titre(class="form-control") }}
-        </div>
-        <div class="col-md-6 mb-3">
-            {{ form.auteur.label(class="form-label") }}
-            {{ form.auteur(class="form-control") }}
-        </div>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.titre.label(class="form-label fw-semibold") }}
+                    {{ form.titre(class="form-control") }}
+                    {% if form.titre.errors %}
+                        <div class="text-danger small">{{ form.titre.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.auteur.label(class="form-label fw-semibold") }}
+                    {{ form.auteur(class="form-control") }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    {{ form.annee.label(class="form-label fw-semibold") }}
+                    {{ form.annee(class="form-control") }}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.filiere.label(class="form-label fw-semibold") }}
+                    {{ form.filiere(class="form-control") }}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.directeur.label(class="form-label fw-semibold") }}
+                    {{ form.directeur(class="form-control") }}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.mention.label(class="form-label fw-semibold") }}
+                    {{ form.mention(class="form-select") }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    {{ form.note_sur_20.label(class="form-label fw-semibold") }}
+                    {{ form.note_sur_20(class="form-control", step="0.5") }}
+                </div>
+                <div class="col-md-3 mb-3">
+                    {{ form.date_soutenance.label(class="form-label fw-semibold") }}
+                    {{ form.date_soutenance(class="form-control", type="date") }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.fichier_pdf.label(class="form-label fw-semibold") }}
+                    {{ form.fichier_pdf(class="form-control", accept=".pdf") }}
+                    {% if memoire.fichier_pdf %}
+                        <div class="form-text">
+                            <i class="fas fa-file-pdf text-danger"></i>
+                            Fichier actuel : <strong>{{ memoire.fichier_pdf }}</strong>
+                            (laisser vide pour conserver)
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form.fichiers_multiples.label(class="form-label fw-semibold") }}
+                {{ form.fichiers_multiples(class="form-control") }}
+                <div class="form-text">Les nouveaux fichiers seront ajoutés aux annexes existantes.</div>
+            </div>
+
+            <div class="mb-4">
+                {{ form.resume.label(class="form-label fw-semibold") }}
+                {{ form.resume(class="form-control", rows=5) }}
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Mettre à jour
+                </button>
+                <a href="{{ url_for('fiche', id=memoire.id) }}" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Annuler
+                </a>
+            </div>
+        </form>
     </div>
-    
-    <div class="row">
-        <div class="col-md-3 mb-3">
-            {{ form.annee.label(class="form-label") }}
-            {{ form.annee(class="form-control") }}
-        </div>
-        <div class="col-md-3 mb-3">
-            {{ form.filiere.label(class="form-label") }}
-            {{ form.filiere(class="form-control") }}
-        </div>
-        <div class="col-md-3 mb-3">
-            {{ form.directeur.label(class="form-label") }}
-            {{ form.directeur(class="form-control") }}
-        </div>
-        <div class="col-md-3 mb-3">
-            {{ form.mention.label(class="form-label") }}
-            {{ form.mention(class="form-select") }}
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-3 mb-3">
-            {{ form.note_sur_20.label(class="form-label") }}
-            {{ form.note_sur_20(class="form-control") }}
-        </div>
-        <div class="col-md-3 mb-3">
-            {{ form.date_soutenance.label(class="form-label") }}
-            {{ form.date_soutenance(class="form-control", type="date") }}
-        </div>
-        <div class="col-md-6 mb-3">
-            {{ form.fichier_pdf.label(class="form-label") }}
-            {{ form.fichier_pdf(class="form-control") }}
-            {% if memoire.fichier_pdf %}
-                <small class="text-muted">Fichier actuel : {{ memoire.fichier_pdf }}</small>
-            {% endif %}
-        </div>
-    </div>
-    
-    <div class="mb-3">
-        {{ form.resume.label(class="form-label") }}
-        {{ form.resume(class="form-control", rows=5) }}
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Mettre à jour</button>
-    <a href="{{ url_for('index') }}" class="btn btn-secondary">Annuler</a>
-</form>
+</div>
 {% endblock %}

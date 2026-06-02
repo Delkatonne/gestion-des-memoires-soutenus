@@ -1,38 +1,4 @@
-﻿# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Base de données
-*.db
-*.sqlite
-*.sqlite3
-
-# Dossiers d'uploads
-uploads/
-instance/
-
-# Fichiers temporaires
-*.log
-*.tmp
-*.temp
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
+"*.docx" 
+"~$*.docx" 
 "instance/" 
-"uploads/" 
-"*.db" 
+"git" 

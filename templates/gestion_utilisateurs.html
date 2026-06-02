@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mb-4"><i class="fas fa-users-cog text-danger"></i> Gestion des utilisateurs</h1>
+
+<div class="row">
+    <!-- Tableau des utilisateurs -->
+    <div class="col-md-5 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-list"></i> Utilisateurs enregistrés</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>#</th>
+                            <th>Nom d'utilisateur</th>
+                            <th>Rôle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>
+                                <i class="fas fa-user text-muted me-1"></i>
+                                {{ user.username }}
+                                {% if user.id == current_user.id %}
+                                    <span class="badge bg-info ms-1" style="font-size:0.65rem;">Vous</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_admin %}
+                                    <span class="badge bg-warning text-dark">Admin</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Utilisateur</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire de modification -->
+    <div class="col-md-7 mb-4">
+        <div class="card shadow-sm border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-key"></i> Modifier le mot de passe d'un utilisateur</h5>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Attention :</strong> Cette action modifie immédiatement le mot de passe de l'utilisateur sélectionné.
+                </div>
+
+                <form method="POST" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.user_id.label(class="form-label fw-semibold") }}
+                        {{ form.user_id(class="form-select") }}
+                        {% if form.user_id.errors %}
+                            <div class="text-danger small">{{ form.user_id.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.nouveau_mdp.label(class="form-label fw-semibold") }}
+                        {{ form.nouveau_mdp(class="form-control", placeholder="Minimum 6 caractères") }}
+                        {% if form.nouveau_mdp.errors %}
+                            <div class="text-danger small">{{ form.nouveau_mdp.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form.confirmer_mdp.label(class="form-label fw-semibold") }}
+                        {{ form.confirmer_mdp(class="form-control", placeholder="Répétez le nouveau mot de passe") }}
+                        {% if form.confirmer_mdp.errors %}
+                            <div class="text-danger small">{{ form.confirmer_mdp.errors[0] }}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Confirmer la modification du mot de passe ?')">
+                            <i class="fas fa-save"></i> Modifier le mot de passe
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Annuler
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
